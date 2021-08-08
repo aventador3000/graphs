@@ -1,0 +1,97 @@
++package graphs
+
+[graphadjlist istartvertex] > dijkstra
+  processVertex > @
+    initializeQ
+    initializeS
+    initializeD
+
+  # Q is a set of vertices yet to be processed. 
+  # Initially, Q = {v ∊ 𝓥}, where 𝓥 is the set of vertices. 
+  # Here, we store indices of vertices, not vertices themselves. 
+  [] > initializeQ
+    map. > @
+      ^.graphadjlist
+      []
+        [currentAdjacency] > map
+          currentAdjacency.vertex.i > @
+
+  # S is a set of vertices that are already processed.
+  # Initially, it is empty.
+  [] > initializeS
+    * > @
+  
+  # D is an array of current path lengths to i'th vertices.
+  # In time, this array converges to an array of 𝛿 values (minimum-lengths), one for each vertex.
+  [] > initializeD
+    mapi. > @
+      ^.graphadjlist
+      []
+        [currentAdjacency] > mapi
+          if. > @
+            eq.
+              currentAdjacency.vertex.i
+              ^.^.^.istartvertex
+            0.0
+            infinity
+  
+  [currQ currS currD] > processVertex
+    findDeleteMinWeight currQ currD (^.graphadjlist) > newQandMin
+
+    relax (newQandMin.min) currD (^.graphadjlist) > relaxedD
+
+    if. > @
+      currQ.length.eq 0
+      currD
+      processVertex
+        (newQandMin.Q)
+        currS.append (newQandMin.min)
+        relaxedD
+
+    [currV currD graph] > relax
+      reduce. > @
+        (graph.get currV).vadjacent
+        currD
+        []
+          [updatedD currentEdge] > reduce
+            if. > @
+              greater.
+                updatedD.get
+                  currentEdge.ivertex
+                add.
+                  updatedD.get
+                    ^.currV
+                  currentEdge.weight
+              updatedD.set
+                currentEdge.ivertex
+                add.
+                  updatedD.get
+                    ^.currV
+                  currentEdge.weight
+              updatedD
+
+    [oldQ currD graph] > findDeleteMinWeight
+      oldQ.get 0 > firstElement
+      oldQ.remove 0 > QwithoutFirstElement
+
+      [Q min minVal] > resultStructure
+
+      reduce. > @
+        QwithoutFirstElement
+        resultStructure
+          QwithoutFirstElement
+          firstElement
+          currD.get firstElement
+        []
+          [acc current] > reduce
+            if. > @
+              less.
+                currD.get current
+                acc.minVal
+              resultStructure
+                remove.
+                  acc.Q.append (acc.min)
+                  current
+                current
+                currD.get current
+              acc
