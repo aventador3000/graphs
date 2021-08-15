@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<program ms="72"
+<program ms="66"
          name="dijkstra.eo"
-         time="2021-08-15T17:14:36.946370Z"
+         time="2021-08-15T17:18:12.286935Z"
          version="1.0.1">
    <listing>+package graphs
 +alias org.eolang.util.ieee754.infinity

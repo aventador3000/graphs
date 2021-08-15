@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<program ms="2"
+<program ms="6"
          name="main.eo"
-         time="2021-08-15T17:14:37.111544Z"
+         time="2021-08-15T17:18:12.443474Z"
          version="1.0.1">
    <listing>+package graphs
 +alias graphs.testGraph
