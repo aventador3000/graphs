@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="2"
+         name="main.eo"
+         time="2021-08-15T17:14:37.111544Z"
+         version="1.0.1">
+   <listing>+package graphs
++alias graphs.testGraph
++alias graphs.dijkstra
++alias org.eolang.txt.sprintf
+
+[args...] &gt; main
+  (dijkstra testGraph 1) &gt; dijk
+  reduce. &gt; @
+    dijk
+    "hello"
+    []
+      [accum current] &gt; reduce
+        sprintf &gt; @
+          "%s\n%d"
+          accum
+          current
+&lt;EOF&gt;</listing>
+   <errors/>
+   <sheets>
+      <sheet>not-empty-atoms</sheet>
+      <sheet>middle-varargs</sheet>
+      <sheet>duplicate-names</sheet>
+      <sheet>broken-aliases</sheet>
+      <sheet>duplicate-aliases</sheet>
+      <sheet>one-body</sheet>
+      <sheet>same-line-names</sheet>
+      <sheet>self-naming</sheet>
+      <sheet>add-refs</sheet>
+      <sheet>wrap-method-calls</sheet>
+      <sheet>vars-float-up</sheet>
+   </sheets>
+   <metas>
+      <meta line="1">
+         <head>package</head>
+         <tail>graphs</tail>
+         <part>graphs</part>
+      </meta>
+      <meta line="2">
+         <head>alias</head>
+         <tail>graphs.testGraph</tail>
+         <part>graphs.testGraph</part>
+      </meta>
+      <meta line="3">
+         <head>alias</head>
+         <tail>graphs.dijkstra</tail>
+         <part>graphs.dijkstra</part>
+      </meta>
+      <meta line="4">
+         <head>alias</head>
+         <tail>org.eolang.txt.sprintf</tail>
+         <part>org.eolang.txt.sprintf</part>
+      </meta>
+   </metas>
+   <objects>
+      <o line="6" name="main">
+         <o line="6" name="args" vararg=""/>
+         <o base="dijkstra" line="7" name="dijk">
+            <o base="testGraph" line="7"/>
+            <o base="int" data="int" line="7">1</o>
+         </o>
+         <o base=".reduce" line="8" name="@">
+            <o base="dijk" line="9" ref="7"/>
+            <o base="string" data="string" line="10">hello</o>
+            <o line="11">
+               <o line="12" name="reduce">
+                  <o line="12" name="accum"/>
+                  <o line="12" name="current"/>
+                  <o base="sprintf" line="13" name="@">
+                     <o base="string" data="string" line="14">%s\n%d</o>
+                     <o base="accum" line="15" ref="12"/>
+                     <o base="current" line="16" ref="12"/>
+                  </o>
+               </o>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>

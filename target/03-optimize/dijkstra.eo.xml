@@ -1,0 +1,1090 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="72"
+         name="dijkstra.eo"
+         time="2021-08-15T17:14:36.946370Z"
+         version="1.0.1">
+   <listing>+package graphs
++alias org.eolang.util.ieee754.infinity
+
+[graphAdjList iStartVertex] &gt; dijkstra
+  processVertex &gt; @
+    initialQ
+    initialS
+    initialD
+    initialP
+
+  # Q is a set of vertices yet to be processed. 
+  # Initially, Q = {v ∊ 𝓥}, where 𝓥 is the set of vertices. 
+  # Here, we store indices of vertices, not vertices themselves. 
+  [] &gt; initialQ
+    map. &gt; @
+      (^.graphAdjList.adjacencies)
+      []
+        [currentAdjacency] &gt; map
+          currentAdjacency.vertex.i &gt; @
+
+  # S is a set of vertices that are already processed.
+  # Initially, it is empty.
+  [] &gt; initialS
+    * &gt; @
+
+  # D is an array of current path lengths to i'th vertices.
+  # In time, this array converges to an array of 𝛿 values (minimum path lengths), one for each vertex.
+  [] &gt; initialD
+    map. &gt; @
+      ^.graphAdjList.adjacencies
+      []
+        [currentAdjacency] &gt; map
+          if. &gt; @
+            eq.
+              currentAdjacency.vertex.i
+              ^.^.^.iStartVertex
+            0.0
+            infinity
+
+  # P is an array where ith element refers to the previous element of the minimum path to ith vertex.
+  # In time, this array converges to an array of π values (minimum path predecessors), one for each vertex.
+  # This array is needed to reconstruct minimum paths from the Starting Edge to all the other edges.
+  [] &gt; initialP
+    map. &gt; @
+      ^.graphAdjList.adjacencies
+      []
+        [currentAdjacency] &gt; map
+          if. &gt; @
+            eq.
+              currentAdjacency.vertex.i
+              ^.^.^.iStartVertex
+            ^.^.^.iStartVertex
+            -1
+
+  [currentQ currentS currentD currentP] &gt; processVertex
+    findDeleteMinWeight currentQ currentD &gt; newQandMin
+
+    relax (newQandMin.min) currentD currentP (^.graphAdjList) &gt; relaxed
+
+    if. &gt; @
+      currentQ.length.eq 0
+      currentP
+      processVertex
+        (newQandMin.newQ)
+        currentS.append (newQandMin.min)
+        relaxed.relaxedD
+        relaxed.relaxedP
+
+    [currV currentD currentP graph] &gt; relax
+      [relaxedD relaxedP] &gt; resultStructure
+      reduce. &gt; @
+        (graph.adjacencies.get currV).edges
+        resultStructure
+          currentD
+          currentP
+        []
+          [updatedDP currentEdge] &gt; reduce
+            if. &gt; @
+              greater.
+                updatedDP.relaxedD.get
+                  currentEdge.ivertex
+                add.
+                  updatedDP.relaxedD.get
+                    ^.^.currV
+                  currentEdge.weight
+              ^.^.resultStructure
+                updatedDP.relaxedD.replace
+                  currentEdge.ivertex
+                  add.
+                    updatedDP.relaxedD.get
+                      ^.^.currV
+                    currentEdge.weight
+                updatedDP.relaxedP.replace
+                  currentEdge.ivertex
+                  ^.^.currV
+              updatedDP
+
+    [oldQ currentD] &gt; findDeleteMinWeight
+      [newQ min] &gt; resultStructure
+      resultStructure &gt; @
+        oldQ.remove minIndex
+        oldQ.get minIndex
+
+      min. &gt; minVertex
+        oldQ
+        []
+          [elemA indexA elemB indexB] &gt; comparator
+            ^.^.currentD.get elemA &gt; dA
+            ^.^.currentD.get elemB &gt; dB
+            if. &gt; @
+              less.
+                dA
+                dB
+              -1
+              if.
+                greater.
+                  dA
+                  dB
+                1
+                0
+
+      if. &gt; minIndex
+        minVertex.eq -1
+        if.
+          oldQ.length.eq 0
+          -1
+          0
+        minVertex
+&lt;EOF&gt;</listing>
+   <errors/>
+   <sheets>
+      <sheet>not-empty-atoms</sheet>
+      <sheet>middle-varargs</sheet>
+      <sheet>duplicate-names</sheet>
+      <sheet>broken-aliases</sheet>
+      <sheet>duplicate-aliases</sheet>
+      <sheet>one-body</sheet>
+      <sheet>same-line-names</sheet>
+      <sheet>self-naming</sheet>
+      <sheet>add-refs</sheet>
+      <sheet>wrap-method-calls</sheet>
+      <sheet>vars-float-up</sheet>
+      <sheet>add-refs</sheet>
+      <sheet>resolve-aliases</sheet>
+      <sheet>resolve-aliases</sheet>
+      <sheet>add-default-package</sheet>
+      <sheet>broken-refs</sheet>
+      <sheet>unknown-names</sheet>
+      <sheet>noname-attributes</sheet>
+      <sheet>duplicate-names</sheet>
+      <sheet>data-objects</sheet>
+      <sheet>globals-to-abstracts</sheet>
+      <sheet>remove-refs</sheet>
+      <sheet>abstracts-float-up</sheet>
+      <sheet>remove-levels</sheet>
+      <sheet>add-refs</sheet>
+      <sheet>fix-missed-names</sheet>
+      <sheet>broken-refs</sheet>
+   </sheets>
+   <metas>
+      <meta line="1">
+         <head>package</head>
+         <tail>graphs</tail>
+         <part>graphs</part>
+      </meta>
+      <meta expanded="" line="2">
+         <head>alias</head>
+         <tail>infinity org.eolang.util.ieee754.infinity</tail>
+         <part>infinity</part>
+         <part>org.eolang.util.ieee754.infinity</part>
+      </meta>
+   </metas>
+   <objects>
+      <o line="4" name="dijkstra" original-name="dijkstra">
+         <o line="4" name="graphAdjList"/>
+         <o line="4" name="iStartVertex"/>
+         <o base="processVertex" line="5" name="@" ref="55">
+            <o base="initialQ" line="6" ref="11"/>
+            <o base="initialS" line="7" ref="21"/>
+            <o base="initialD" line="8" ref="26"/>
+            <o base="initialP" line="9" ref="40"/>
+         </o>
+         <o base="dijkstra$initialQ"
+            cut="7"
+            line="11"
+            name="initialQ"
+            ref="11">
+            <o as="graphAdjList" base="graphAdjList" level="1" ref="4"/>
+            <o as="iStartVertex" base="iStartVertex" level="1" ref="4"/>
+            <o as="@" base="@" level="1" ref="5"/>
+            <o as="initialS" base="initialS" level="1" ref="21"/>
+            <o as="initialD" base="initialD" level="1" ref="26"/>
+            <o as="initialP" base="initialP" level="1" ref="40"/>
+            <o as="processVertex" base="processVertex" level="1" ref="55"/>
+         </o>
+         <o base="dijkstra$initialS"
+            cut="18"
+            line="21"
+            name="initialS"
+            ref="21">
+            <o as="graphAdjList" base="graphAdjList" level="1" ref="4"/>
+            <o as="iStartVertex" base="iStartVertex" level="1" ref="4"/>
+            <o as="@" base="@" level="1" ref="5"/>
+            <o as="initialQ" base="initialQ" level="1" ref="11"/>
+            <o as="initialD" base="initialD" level="1" ref="26"/>
+            <o as="initialP" base="initialP" level="1" ref="40"/>
+            <o as="processVertex" base="processVertex" level="1" ref="55"/>
+         </o>
+         <o base="dijkstra$initialD"
+            cut="20"
+            line="26"
+            name="initialD"
+            ref="26">
+            <o as="graphAdjList" base="graphAdjList" level="1" ref="4"/>
+            <o as="iStartVertex" base="iStartVertex" level="1" ref="4"/>
+            <o as="@" base="@" level="1" ref="5"/>
+            <o as="initialQ" base="initialQ" level="1" ref="11"/>
+            <o as="initialS" base="initialS" level="1" ref="21"/>
+            <o as="initialP" base="initialP" level="1" ref="40"/>
+            <o as="processVertex" base="processVertex" level="1" ref="55"/>
+         </o>
+         <o base="dijkstra$initialP"
+            cut="39"
+            line="40"
+            name="initialP"
+            ref="40">
+            <o as="graphAdjList" base="graphAdjList" level="1" ref="4"/>
+            <o as="iStartVertex" base="iStartVertex" level="1" ref="4"/>
+            <o as="@" base="@" level="1" ref="5"/>
+            <o as="initialQ" base="initialQ" level="1" ref="11"/>
+            <o as="initialS" base="initialS" level="1" ref="21"/>
+            <o as="initialD" base="initialD" level="1" ref="26"/>
+            <o as="processVertex" base="processVertex" level="1" ref="55"/>
+         </o>
+         <o base="dijkstra$processVertex"
+            cut="61"
+            line="55"
+            name="processVertex"
+            ref="55">
+            <o as="graphAdjList" base="graphAdjList" level="1" ref="4"/>
+            <o as="iStartVertex" base="iStartVertex" level="1" ref="4"/>
+            <o as="@" base="@" level="1" ref="5"/>
+            <o as="initialQ" base="initialQ" level="1" ref="11"/>
+            <o as="initialS" base="initialS" level="1" ref="21"/>
+            <o as="initialD" base="initialD" level="1" ref="26"/>
+            <o as="initialP" base="initialP" level="1" ref="40"/>
+         </o>
+      </o>
+      <o ancestors="1"
+         line="11"
+         name="dijkstra$initialQ"
+         original-name="initialQ"
+         parent="dijkstra">
+         <o base=".map" line="15" name="@">
+            <o base=".adjacencies" line="16" method="">
+               <o base=".graphAdjList" line="16" method="">
+                  <o base="^" line="16"/>
+               </o>
+            </o>
+            <o base="dijkstra$initialQ$0$α1" cut="10" line="17" ref="17">
+               <o as="graphAdjList" base="graphAdjList" level="2" ref="11.4"/>
+               <o as="iStartVertex" base="iStartVertex" level="2" ref="11.4"/>
+               <o as="@" base="@" level="2" ref="15"/>
+               <o as="initialS" base="initialS" level="2" ref="11.21"/>
+               <o as="initialD" base="initialD" level="2" ref="11.26"/>
+               <o as="initialP" base="initialP" level="2" ref="11.40"/>
+               <o as="processVertex" base="processVertex" level="2" ref="11.55"/>
+            </o>
+         </o>
+         <o level="1" line="11.4" name="graphAdjList"/>
+         <o level="1" line="11.4" name="iStartVertex"/>
+         <o level="1" line="11.21" name="initialS"/>
+         <o level="1" line="11.26" name="initialD"/>
+         <o level="1" line="11.40" name="initialP"/>
+         <o level="1" line="11.55" name="processVertex"/>
+      </o>
+      <o ancestors="2"
+         line="17"
+         name="dijkstra$initialQ$0$α1"
+         parent="dijkstra">
+         <o base="dijkstra$initialQ$0$α1$map"
+            cut="10"
+            line="18"
+            name="map"
+            ref="18">
+            <o as="graphAdjList" base="graphAdjList" level="3" ref="17.4"/>
+            <o as="iStartVertex" base="iStartVertex" level="3" ref="17.4"/>
+            <o as="@" base="@" level="3" ref="17.5"/>
+            <o as="initialS" base="initialS" level="3" ref="17.21"/>
+            <o as="initialD" base="initialD" level="3" ref="17.26"/>
+            <o as="initialP" base="initialP" level="3" ref="17.40"/>
+            <o as="processVertex" base="processVertex" level="3" ref="17.55"/>
+         </o>
+         <o level="2" line="17.4" name="graphAdjList"/>
+         <o level="2" line="17.4" name="iStartVertex"/>
+         <o level="2" line="17.5" name="@"/>
+         <o level="2" line="17.21" name="initialS"/>
+         <o level="2" line="17.26" name="initialD"/>
+         <o level="2" line="17.40" name="initialP"/>
+         <o level="2" line="17.55" name="processVertex"/>
+      </o>
+      <o ancestors="3"
+         line="18"
+         name="dijkstra$initialQ$0$α1$map"
+         original-name="map"
+         parent="dijkstra">
+         <o line="18" name="currentAdjacency"/>
+         <o base=".i" line="19" method="" name="@">
+            <o base=".vertex" line="19" method="">
+               <o base="currentAdjacency" line="19" ref="18"/>
+            </o>
+         </o>
+         <o level="3" line="18.4" name="graphAdjList"/>
+         <o level="3" line="18.4" name="iStartVertex"/>
+         <o level="3" line="18.21" name="initialS"/>
+         <o level="3" line="18.26" name="initialD"/>
+         <o level="3" line="18.40" name="initialP"/>
+         <o level="3" line="18.55" name="processVertex"/>
+      </o>
+      <o ancestors="1"
+         line="21"
+         name="dijkstra$initialS"
+         original-name="initialS"
+         parent="dijkstra">
+         <o base="org.eolang.array" data="array" line="24" name="@"/>
+         <o level="1" line="21.4" name="graphAdjList"/>
+         <o level="1" line="21.4" name="iStartVertex"/>
+         <o level="1" line="21.11" name="initialQ"/>
+         <o level="1" line="21.26" name="initialD"/>
+         <o level="1" line="21.40" name="initialP"/>
+         <o level="1" line="21.55" name="processVertex"/>
+      </o>
+      <o ancestors="1"
+         line="26"
+         name="dijkstra$initialD"
+         original-name="initialD"
+         parent="dijkstra">
+         <o base=".map" line="29" name="@">
+            <o base=".adjacencies" line="30" method="">
+               <o base=".graphAdjList" line="30" method="">
+                  <o base="^" line="30"/>
+               </o>
+            </o>
+            <o base="dijkstra$initialD$0$α1" cut="23" line="31" ref="31">
+               <o as="graphAdjList" base="graphAdjList" level="2" ref="26.4"/>
+               <o as="iStartVertex" base="iStartVertex" level="2" ref="26.4"/>
+               <o as="@" base="@" level="2" ref="29"/>
+               <o as="initialQ" base="initialQ" level="2" ref="26.11"/>
+               <o as="initialS" base="initialS" level="2" ref="26.21"/>
+               <o as="initialP" base="initialP" level="2" ref="26.40"/>
+               <o as="processVertex" base="processVertex" level="2" ref="26.55"/>
+            </o>
+         </o>
+         <o level="1" line="26.4" name="graphAdjList"/>
+         <o level="1" line="26.4" name="iStartVertex"/>
+         <o level="1" line="26.11" name="initialQ"/>
+         <o level="1" line="26.21" name="initialS"/>
+         <o level="1" line="26.40" name="initialP"/>
+         <o level="1" line="26.55" name="processVertex"/>
+      </o>
+      <o ancestors="2"
+         line="31"
+         name="dijkstra$initialD$0$α1"
+         parent="dijkstra">
+         <o base="dijkstra$initialD$0$α1$map"
+            cut="23"
+            line="32"
+            name="map"
+            ref="32">
+            <o as="graphAdjList" base="graphAdjList" level="3" ref="31.4"/>
+            <o as="iStartVertex" base="iStartVertex" level="3" ref="31.4"/>
+            <o as="@" base="@" level="3" ref="31.5"/>
+            <o as="initialQ" base="initialQ" level="3" ref="31.11"/>
+            <o as="initialS" base="initialS" level="3" ref="31.21"/>
+            <o as="initialP" base="initialP" level="3" ref="31.40"/>
+            <o as="processVertex" base="processVertex" level="3" ref="31.55"/>
+         </o>
+         <o level="2" line="31.4" name="graphAdjList"/>
+         <o level="2" line="31.4" name="iStartVertex"/>
+         <o level="2" line="31.5" name="@"/>
+         <o level="2" line="31.11" name="initialQ"/>
+         <o level="2" line="31.21" name="initialS"/>
+         <o level="2" line="31.40" name="initialP"/>
+         <o level="2" line="31.55" name="processVertex"/>
+      </o>
+      <o ancestors="3"
+         line="32"
+         name="dijkstra$initialD$0$α1$map"
+         original-name="map"
+         parent="dijkstra">
+         <o line="32" name="currentAdjacency"/>
+         <o base=".if" line="33" name="@">
+            <o base=".eq" line="34">
+               <o base=".i" line="35" method="">
+                  <o base=".vertex" line="35" method="">
+                     <o base="currentAdjacency" line="35" ref="32"/>
+                  </o>
+               </o>
+               <o base=".iStartVertex" line="36" method="">
+                  <o base=".^" line="36" method="">
+                     <o base=".^" line="36" method="">
+                        <o base="^" line="36"/>
+                     </o>
+                  </o>
+               </o>
+            </o>
+            <o base="org.eolang.float" data="float" line="37">0.0</o>
+            <o base="org.eolang.util.ieee754.infinity" line="38"/>
+         </o>
+         <o level="3" line="32.4" name="graphAdjList"/>
+         <o level="3" line="32.4" name="iStartVertex"/>
+         <o level="3" line="32.11" name="initialQ"/>
+         <o level="3" line="32.21" name="initialS"/>
+         <o level="3" line="32.40" name="initialP"/>
+         <o level="3" line="32.55" name="processVertex"/>
+      </o>
+      <o ancestors="1"
+         line="40"
+         name="dijkstra$initialP"
+         original-name="initialP"
+         parent="dijkstra">
+         <o base=".map" line="44" name="@">
+            <o base=".adjacencies" line="45" method="">
+               <o base=".graphAdjList" line="45" method="">
+                  <o base="^" line="45"/>
+               </o>
+            </o>
+            <o base="dijkstra$initialP$0$α1" cut="42" line="46" ref="46">
+               <o as="graphAdjList" base="graphAdjList" level="2" ref="40.4"/>
+               <o as="iStartVertex" base="iStartVertex" level="2" ref="40.4"/>
+               <o as="@" base="@" level="2" ref="44"/>
+               <o as="initialQ" base="initialQ" level="2" ref="40.11"/>
+               <o as="initialS" base="initialS" level="2" ref="40.21"/>
+               <o as="initialD" base="initialD" level="2" ref="40.26"/>
+               <o as="processVertex" base="processVertex" level="2" ref="40.55"/>
+            </o>
+         </o>
+         <o level="1" line="40.4" name="graphAdjList"/>
+         <o level="1" line="40.4" name="iStartVertex"/>
+         <o level="1" line="40.11" name="initialQ"/>
+         <o level="1" line="40.21" name="initialS"/>
+         <o level="1" line="40.26" name="initialD"/>
+         <o level="1" line="40.55" name="processVertex"/>
+      </o>
+      <o ancestors="2"
+         line="46"
+         name="dijkstra$initialP$0$α1"
+         parent="dijkstra">
+         <o base="dijkstra$initialP$0$α1$map"
+            cut="42"
+            line="47"
+            name="map"
+            ref="47">
+            <o as="graphAdjList" base="graphAdjList" level="3" ref="46.4"/>
+            <o as="iStartVertex" base="iStartVertex" level="3" ref="46.4"/>
+            <o as="@" base="@" level="3" ref="46.5"/>
+            <o as="initialQ" base="initialQ" level="3" ref="46.11"/>
+            <o as="initialS" base="initialS" level="3" ref="46.21"/>
+            <o as="initialD" base="initialD" level="3" ref="46.26"/>
+            <o as="processVertex" base="processVertex" level="3" ref="46.55"/>
+         </o>
+         <o level="2" line="46.4" name="graphAdjList"/>
+         <o level="2" line="46.4" name="iStartVertex"/>
+         <o level="2" line="46.5" name="@"/>
+         <o level="2" line="46.11" name="initialQ"/>
+         <o level="2" line="46.21" name="initialS"/>
+         <o level="2" line="46.26" name="initialD"/>
+         <o level="2" line="46.55" name="processVertex"/>
+      </o>
+      <o ancestors="3"
+         line="47"
+         name="dijkstra$initialP$0$α1$map"
+         original-name="map"
+         parent="dijkstra">
+         <o line="47" name="currentAdjacency"/>
+         <o base=".if" line="48" name="@">
+            <o base=".eq" line="49">
+               <o base=".i" line="50" method="">
+                  <o base=".vertex" line="50" method="">
+                     <o base="currentAdjacency" line="50" ref="47"/>
+                  </o>
+               </o>
+               <o base=".iStartVertex" line="51" method="">
+                  <o base=".^" line="51" method="">
+                     <o base=".^" line="51" method="">
+                        <o base="^" line="51"/>
+                     </o>
+                  </o>
+               </o>
+            </o>
+            <o base=".iStartVertex" line="52" method="">
+               <o base=".^" line="52" method="">
+                  <o base=".^" line="52" method="">
+                     <o base="^" line="52"/>
+                  </o>
+               </o>
+            </o>
+            <o base="org.eolang.int" data="int" line="53">-1</o>
+         </o>
+         <o level="3" line="47.4" name="graphAdjList"/>
+         <o level="3" line="47.4" name="iStartVertex"/>
+         <o level="3" line="47.11" name="initialQ"/>
+         <o level="3" line="47.21" name="initialS"/>
+         <o level="3" line="47.26" name="initialD"/>
+         <o level="3" line="47.55" name="processVertex"/>
+      </o>
+      <o ancestors="1"
+         line="55"
+         name="dijkstra$processVertex"
+         original-name="processVertex"
+         parent="dijkstra">
+         <o line="55" name="currentQ"/>
+         <o line="55" name="currentS"/>
+         <o line="55" name="currentD"/>
+         <o line="55" name="currentP"/>
+         <o base="findDeleteMinWeight" line="56" name="newQandMin" ref="98">
+            <o base="currentQ" line="56" ref="55"/>
+            <o base="currentD" line="56" ref="55"/>
+         </o>
+         <o base="relax" line="58" name="relaxed" ref="69">
+            <o base=".min" line="58" method="">
+               <o base="newQandMin" line="58" ref="56"/>
+            </o>
+            <o base="currentD" line="58" ref="55"/>
+            <o base="currentP" line="58" ref="55"/>
+            <o base=".graphAdjList" line="58" method="">
+               <o base="^" line="58"/>
+            </o>
+         </o>
+         <o base=".if" line="60" name="@">
+            <o base=".eq" line="61" method="">
+               <o base=".length" line="61" method="">
+                  <o base="currentQ" line="61" ref="55"/>
+               </o>
+               <o base="org.eolang.int" data="int" line="61">0</o>
+            </o>
+            <o base="currentP" line="62" ref="55"/>
+            <o base="dijkstra$processVertex" line="63">
+               <o base=".newQ" line="64" method="">
+                  <o base="newQandMin" line="64" ref="56"/>
+               </o>
+               <o base=".append" line="65" method="">
+                  <o base="currentS" line="65" ref="55"/>
+                  <o base=".min" line="65" method="">
+                     <o base="newQandMin" line="65" ref="56"/>
+                  </o>
+               </o>
+               <o base=".relaxedD" line="66" method="">
+                  <o base="relaxed" line="66" ref="58"/>
+               </o>
+               <o base=".relaxedP" line="67" method="">
+                  <o base="relaxed" line="67" ref="58"/>
+               </o>
+            </o>
+         </o>
+         <o base="dijkstra$processVertex$relax"
+            cut="92"
+            line="69"
+            name="relax"
+            ref="69">
+            <o as="currentQ" base="currentQ" level="1" ref="55"/>
+            <o as="currentS" base="currentS" level="1" ref="55"/>
+            <o as="currentD" base="currentD" level="1" ref="55"/>
+            <o as="currentP" base="currentP" level="1" ref="55"/>
+            <o as="newQandMin" base="newQandMin" level="1" ref="56"/>
+            <o as="relaxed" base="relaxed" level="1" ref="58"/>
+            <o as="@" base="@" level="1" ref="60"/>
+            <o as="findDeleteMinWeight"
+               base="findDeleteMinWeight"
+               level="1"
+               ref="98"/>
+            <o as="graphAdjList" base="graphAdjList" level="2" ref="55.4"/>
+            <o as="iStartVertex" base="iStartVertex" level="2" ref="55.4"/>
+            <o as="initialQ" base="initialQ" level="2" ref="55.11"/>
+            <o as="initialS" base="initialS" level="2" ref="55.21"/>
+            <o as="initialD" base="initialD" level="2" ref="55.26"/>
+            <o as="initialP" base="initialP" level="2" ref="55.40"/>
+         </o>
+         <o base="dijkstra$processVertex$findDeleteMinWeight"
+            cut="155"
+            line="98"
+            name="findDeleteMinWeight"
+            ref="98">
+            <o as="currentQ" base="currentQ" level="1" ref="55"/>
+            <o as="currentS" base="currentS" level="1" ref="55"/>
+            <o as="currentD" base="currentD" level="1" ref="55"/>
+            <o as="currentP" base="currentP" level="1" ref="55"/>
+            <o as="newQandMin" base="newQandMin" level="1" ref="56"/>
+            <o as="relaxed" base="relaxed" level="1" ref="58"/>
+            <o as="@" base="@" level="1" ref="60"/>
+            <o as="relax" base="relax" level="1" ref="69"/>
+            <o as="graphAdjList" base="graphAdjList" level="2" ref="55.4"/>
+            <o as="iStartVertex" base="iStartVertex" level="2" ref="55.4"/>
+            <o as="initialQ" base="initialQ" level="2" ref="55.11"/>
+            <o as="initialS" base="initialS" level="2" ref="55.21"/>
+            <o as="initialD" base="initialD" level="2" ref="55.26"/>
+            <o as="initialP" base="initialP" level="2" ref="55.40"/>
+         </o>
+         <o level="1" line="55.4" name="graphAdjList"/>
+         <o level="1" line="55.4" name="iStartVertex"/>
+         <o level="1" line="55.11" name="initialQ"/>
+         <o level="1" line="55.21" name="initialS"/>
+         <o level="1" line="55.26" name="initialD"/>
+         <o level="1" line="55.40" name="initialP"/>
+      </o>
+      <o ancestors="2"
+         line="69"
+         name="dijkstra$processVertex$relax"
+         original-name="relax"
+         parent="dijkstra">
+         <o line="69" name="currV"/>
+         <o line="69" name="currentD"/>
+         <o line="69" name="currentP"/>
+         <o line="69" name="graph"/>
+         <o base="dijkstra$processVertex$relax$resultStructure"
+            cut="96"
+            line="70"
+            name="resultStructure"
+            ref="70">
+            <o as="currV" base="currV" level="1" ref="69"/>
+            <o as="currentD" base="currentD" level="1" ref="69"/>
+            <o as="currentP" base="currentP" level="1" ref="69"/>
+            <o as="graph" base="graph" level="1" ref="69"/>
+            <o as="@" base="@" level="1" ref="71"/>
+            <o as="currentQ" base="currentQ" level="2" ref="69.55"/>
+            <o as="currentS" base="currentS" level="2" ref="69.55"/>
+            <o as="newQandMin" base="newQandMin" level="2" ref="69.56"/>
+            <o as="relaxed" base="relaxed" level="2" ref="69.58"/>
+            <o as="findDeleteMinWeight"
+               base="findDeleteMinWeight"
+               level="2"
+               ref="69.98"/>
+            <o as="graphAdjList" base="graphAdjList" level="3" ref="69.4"/>
+            <o as="iStartVertex" base="iStartVertex" level="3" ref="69.4"/>
+            <o as="initialQ" base="initialQ" level="3" ref="69.11"/>
+            <o as="initialS" base="initialS" level="3" ref="69.21"/>
+            <o as="initialD" base="initialD" level="3" ref="69.26"/>
+            <o as="initialP" base="initialP" level="3" ref="69.40"/>
+         </o>
+         <o base=".reduce" line="71" name="@">
+            <o base=".edges" line="72" method="">
+               <o base=".get" line="72" method="">
+                  <o base=".adjacencies" line="72" method="">
+                     <o base="graph" line="72" ref="69"/>
+                  </o>
+                  <o base="currV" line="72" ref="69"/>
+               </o>
+            </o>
+            <o base="resultStructure" line="73" ref="70">
+               <o base="currentD" line="74" ref="69"/>
+               <o base="currentP" line="75" ref="69"/>
+            </o>
+            <o base="dijkstra$processVertex$relax$5$α2"
+               cut="107"
+               line="76"
+               ref="76">
+               <o as="currV" base="currV" level="1" ref="69"/>
+               <o as="currentD" base="currentD" level="1" ref="69"/>
+               <o as="currentP" base="currentP" level="1" ref="69"/>
+               <o as="graph" base="graph" level="1" ref="69"/>
+               <o as="resultStructure" base="resultStructure" level="1" ref="70"/>
+               <o as="currentQ" base="currentQ" level="2" ref="69.55"/>
+               <o as="currentS" base="currentS" level="2" ref="69.55"/>
+               <o as="newQandMin" base="newQandMin" level="2" ref="69.56"/>
+               <o as="relaxed" base="relaxed" level="2" ref="69.58"/>
+               <o as="@" base="@" level="2" ref="71"/>
+               <o as="findDeleteMinWeight"
+                  base="findDeleteMinWeight"
+                  level="2"
+                  ref="69.98"/>
+               <o as="graphAdjList" base="graphAdjList" level="3" ref="69.4"/>
+               <o as="iStartVertex" base="iStartVertex" level="3" ref="69.4"/>
+               <o as="initialQ" base="initialQ" level="3" ref="69.11"/>
+               <o as="initialS" base="initialS" level="3" ref="69.21"/>
+               <o as="initialD" base="initialD" level="3" ref="69.26"/>
+               <o as="initialP" base="initialP" level="3" ref="69.40"/>
+            </o>
+         </o>
+         <o level="1" line="69.55" name="currentQ"/>
+         <o level="1" line="69.55" name="currentS"/>
+         <o level="1" line="69.56" name="newQandMin"/>
+         <o level="1" line="69.58" name="relaxed"/>
+         <o level="1" line="69.98" name="findDeleteMinWeight"/>
+         <o level="2" line="69.4" name="graphAdjList"/>
+         <o level="2" line="69.4" name="iStartVertex"/>
+         <o level="2" line="69.11" name="initialQ"/>
+         <o level="2" line="69.21" name="initialS"/>
+         <o level="2" line="69.26" name="initialD"/>
+         <o level="2" line="69.40" name="initialP"/>
+      </o>
+      <o ancestors="3"
+         line="70"
+         name="dijkstra$processVertex$relax$resultStructure"
+         original-name="resultStructure"
+         parent="dijkstra">
+         <o line="70" name="relaxedD"/>
+         <o line="70" name="relaxedP"/>
+         <o level="1" line="70.69" name="currV"/>
+         <o level="1" line="70.69" name="currentD"/>
+         <o level="1" line="70.69" name="currentP"/>
+         <o level="1" line="70.69" name="graph"/>
+         <o level="1" line="70.71" name="@"/>
+         <o level="2" line="70.55" name="currentQ"/>
+         <o level="2" line="70.55" name="currentS"/>
+         <o level="2" line="70.56" name="newQandMin"/>
+         <o level="2" line="70.58" name="relaxed"/>
+         <o level="2" line="70.98" name="findDeleteMinWeight"/>
+         <o level="3" line="70.4" name="graphAdjList"/>
+         <o level="3" line="70.4" name="iStartVertex"/>
+         <o level="3" line="70.11" name="initialQ"/>
+         <o level="3" line="70.21" name="initialS"/>
+         <o level="3" line="70.26" name="initialD"/>
+         <o level="3" line="70.40" name="initialP"/>
+      </o>
+      <o ancestors="3"
+         line="76"
+         name="dijkstra$processVertex$relax$5$α2"
+         parent="dijkstra">
+         <o base="dijkstra$processVertex$relax$5$α2$reduce"
+            cut="107"
+            line="77"
+            name="reduce"
+            ref="77">
+            <o as="currV" base="currV" level="2" ref="76.69"/>
+            <o as="currentD" base="currentD" level="2" ref="76.69"/>
+            <o as="currentP" base="currentP" level="2" ref="76.69"/>
+            <o as="graph" base="graph" level="2" ref="76.69"/>
+            <o as="resultStructure"
+               base="resultStructure"
+               level="2"
+               ref="76.70"/>
+            <o as="currentQ" base="currentQ" level="3" ref="76.55"/>
+            <o as="currentS" base="currentS" level="3" ref="76.55"/>
+            <o as="newQandMin" base="newQandMin" level="3" ref="76.56"/>
+            <o as="relaxed" base="relaxed" level="3" ref="76.58"/>
+            <o as="@" base="@" level="3" ref="76.60"/>
+            <o as="findDeleteMinWeight"
+               base="findDeleteMinWeight"
+               level="3"
+               ref="76.98"/>
+            <o as="graphAdjList" base="graphAdjList" level="4" ref="76.4"/>
+            <o as="iStartVertex" base="iStartVertex" level="4" ref="76.4"/>
+            <o as="initialQ" base="initialQ" level="4" ref="76.11"/>
+            <o as="initialS" base="initialS" level="4" ref="76.21"/>
+            <o as="initialD" base="initialD" level="4" ref="76.26"/>
+            <o as="initialP" base="initialP" level="4" ref="76.40"/>
+         </o>
+         <o level="1" line="76.69" name="currV"/>
+         <o level="1" line="76.69" name="currentD"/>
+         <o level="1" line="76.69" name="currentP"/>
+         <o level="1" line="76.69" name="graph"/>
+         <o level="1" line="76.70" name="resultStructure"/>
+         <o level="2" line="76.55" name="currentQ"/>
+         <o level="2" line="76.55" name="currentS"/>
+         <o level="2" line="76.56" name="newQandMin"/>
+         <o level="2" line="76.58" name="relaxed"/>
+         <o level="2" line="76.60" name="@"/>
+         <o level="2" line="76.98" name="findDeleteMinWeight"/>
+         <o level="3" line="76.4" name="graphAdjList"/>
+         <o level="3" line="76.4" name="iStartVertex"/>
+         <o level="3" line="76.11" name="initialQ"/>
+         <o level="3" line="76.21" name="initialS"/>
+         <o level="3" line="76.26" name="initialD"/>
+         <o level="3" line="76.40" name="initialP"/>
+      </o>
+      <o ancestors="4"
+         line="77"
+         name="dijkstra$processVertex$relax$5$α2$reduce"
+         original-name="reduce"
+         parent="dijkstra">
+         <o line="77" name="updatedDP"/>
+         <o line="77" name="currentEdge"/>
+         <o base=".if" line="78" name="@">
+            <o base=".greater" line="79">
+               <o base=".get" line="80" method="">
+                  <o base=".relaxedD" line="80" method="">
+                     <o base="updatedDP" line="80" ref="77"/>
+                  </o>
+                  <o base=".ivertex" line="81" method="">
+                     <o base="currentEdge" line="81" ref="77"/>
+                  </o>
+               </o>
+               <o base=".add" line="82">
+                  <o base=".get" line="83" method="">
+                     <o base=".relaxedD" line="83" method="">
+                        <o base="updatedDP" line="83" ref="77"/>
+                     </o>
+                     <o base=".currV" line="84" method="">
+                        <o base=".^" line="84" method="">
+                           <o base="^" line="84"/>
+                        </o>
+                     </o>
+                  </o>
+                  <o base=".weight" line="85" method="">
+                     <o base="currentEdge" line="85" ref="77"/>
+                  </o>
+               </o>
+            </o>
+            <o base=".resultStructure" line="86" method="">
+               <o base=".^" line="86" method="">
+                  <o base="^" line="86"/>
+               </o>
+               <o base=".replace" line="87" method="">
+                  <o base=".relaxedD" line="87" method="">
+                     <o base="updatedDP" line="87" ref="77"/>
+                  </o>
+                  <o base=".ivertex" line="88" method="">
+                     <o base="currentEdge" line="88" ref="77"/>
+                  </o>
+                  <o base=".add" line="89">
+                     <o base=".get" line="90" method="">
+                        <o base=".relaxedD" line="90" method="">
+                           <o base="updatedDP" line="90" ref="77"/>
+                        </o>
+                        <o base=".currV" line="91" method="">
+                           <o base=".^" line="91" method="">
+                              <o base="^" line="91"/>
+                           </o>
+                        </o>
+                     </o>
+                     <o base=".weight" line="92" method="">
+                        <o base="currentEdge" line="92" ref="77"/>
+                     </o>
+                  </o>
+               </o>
+               <o base=".replace" line="93" method="">
+                  <o base=".relaxedP" line="93" method="">
+                     <o base="updatedDP" line="93" ref="77"/>
+                  </o>
+                  <o base=".ivertex" line="94" method="">
+                     <o base="currentEdge" line="94" ref="77"/>
+                  </o>
+                  <o base=".currV" line="95" method="">
+                     <o base=".^" line="95" method="">
+                        <o base="^" line="95"/>
+                     </o>
+                  </o>
+               </o>
+            </o>
+            <o base="updatedDP" line="96" ref="77"/>
+         </o>
+         <o level="2" line="77.69" name="currV"/>
+         <o level="2" line="77.69" name="currentD"/>
+         <o level="2" line="77.69" name="currentP"/>
+         <o level="2" line="77.69" name="graph"/>
+         <o level="2" line="77.70" name="resultStructure"/>
+         <o level="3" line="77.55" name="currentQ"/>
+         <o level="3" line="77.55" name="currentS"/>
+         <o level="3" line="77.56" name="newQandMin"/>
+         <o level="3" line="77.58" name="relaxed"/>
+         <o level="3" line="77.98" name="findDeleteMinWeight"/>
+         <o level="4" line="77.4" name="graphAdjList"/>
+         <o level="4" line="77.4" name="iStartVertex"/>
+         <o level="4" line="77.11" name="initialQ"/>
+         <o level="4" line="77.21" name="initialS"/>
+         <o level="4" line="77.26" name="initialD"/>
+         <o level="4" line="77.40" name="initialP"/>
+      </o>
+      <o ancestors="2"
+         line="98"
+         name="dijkstra$processVertex$findDeleteMinWeight"
+         original-name="findDeleteMinWeight"
+         parent="dijkstra">
+         <o line="98" name="oldQ"/>
+         <o line="98" name="currentD"/>
+         <o base="dijkstra$processVertex$findDeleteMinWeight$resultStructure"
+            cut="157"
+            line="99"
+            name="resultStructure"
+            ref="99">
+            <o as="oldQ" base="oldQ" level="1" ref="98"/>
+            <o as="currentD" base="currentD" level="1" ref="98"/>
+            <o as="@" base="@" level="1" ref="100"/>
+            <o as="minVertex" base="minVertex" level="1" ref="104"/>
+            <o as="minIndex" base="minIndex" level="1" ref="122"/>
+            <o as="currentQ" base="currentQ" level="2" ref="98.55"/>
+            <o as="currentS" base="currentS" level="2" ref="98.55"/>
+            <o as="currentP" base="currentP" level="2" ref="98.55"/>
+            <o as="newQandMin" base="newQandMin" level="2" ref="98.56"/>
+            <o as="relaxed" base="relaxed" level="2" ref="98.58"/>
+            <o as="relax" base="relax" level="2" ref="98.69"/>
+            <o as="graphAdjList" base="graphAdjList" level="3" ref="98.4"/>
+            <o as="iStartVertex" base="iStartVertex" level="3" ref="98.4"/>
+            <o as="initialQ" base="initialQ" level="3" ref="98.11"/>
+            <o as="initialS" base="initialS" level="3" ref="98.21"/>
+            <o as="initialD" base="initialD" level="3" ref="98.26"/>
+            <o as="initialP" base="initialP" level="3" ref="98.40"/>
+         </o>
+         <o base="resultStructure" line="100" name="@" ref="99">
+            <o base=".remove" line="101" method="">
+               <o base="oldQ" line="101" ref="98"/>
+               <o base="minIndex" line="101" ref="122"/>
+            </o>
+            <o base=".get" line="102" method="">
+               <o base="oldQ" line="102" ref="98"/>
+               <o base="minIndex" line="102" ref="122"/>
+            </o>
+         </o>
+         <o base=".min" line="104" name="minVertex">
+            <o base="oldQ" line="105" ref="98"/>
+            <o base="dijkstra$processVertex$findDeleteMinWeight$4$α1"
+               cut="168"
+               line="106"
+               ref="106">
+               <o as="oldQ" base="oldQ" level="1" ref="98"/>
+               <o as="currentD" base="currentD" level="1" ref="98"/>
+               <o as="resultStructure" base="resultStructure" level="1" ref="99"/>
+               <o as="@" base="@" level="1" ref="100"/>
+               <o as="minIndex" base="minIndex" level="1" ref="122"/>
+               <o as="currentQ" base="currentQ" level="2" ref="98.55"/>
+               <o as="currentS" base="currentS" level="2" ref="98.55"/>
+               <o as="currentP" base="currentP" level="2" ref="98.55"/>
+               <o as="newQandMin" base="newQandMin" level="2" ref="98.56"/>
+               <o as="relaxed" base="relaxed" level="2" ref="98.58"/>
+               <o as="relax" base="relax" level="2" ref="98.69"/>
+               <o as="graphAdjList" base="graphAdjList" level="3" ref="98.4"/>
+               <o as="iStartVertex" base="iStartVertex" level="3" ref="98.4"/>
+               <o as="initialQ" base="initialQ" level="3" ref="98.11"/>
+               <o as="initialS" base="initialS" level="3" ref="98.21"/>
+               <o as="initialD" base="initialD" level="3" ref="98.26"/>
+               <o as="initialP" base="initialP" level="3" ref="98.40"/>
+            </o>
+         </o>
+         <o base=".if" line="122" name="minIndex">
+            <o base=".eq" line="123" method="">
+               <o base="minVertex" line="123" ref="104"/>
+               <o base="org.eolang.int" data="int" line="123">-1</o>
+            </o>
+            <o base=".if" line="124">
+               <o base=".eq" line="125" method="">
+                  <o base=".length" line="125" method="">
+                     <o base="oldQ" line="125" ref="98"/>
+                  </o>
+                  <o base="org.eolang.int" data="int" line="125">0</o>
+               </o>
+               <o base="org.eolang.int" data="int" line="126">-1</o>
+               <o base="org.eolang.int" data="int" line="127">0</o>
+            </o>
+            <o base="minVertex" line="128" ref="104"/>
+         </o>
+         <o level="1" line="98.55" name="currentQ"/>
+         <o level="1" line="98.55" name="currentS"/>
+         <o level="1" line="98.55" name="currentP"/>
+         <o level="1" line="98.56" name="newQandMin"/>
+         <o level="1" line="98.58" name="relaxed"/>
+         <o level="1" line="98.69" name="relax"/>
+         <o level="2" line="98.4" name="graphAdjList"/>
+         <o level="2" line="98.4" name="iStartVertex"/>
+         <o level="2" line="98.11" name="initialQ"/>
+         <o level="2" line="98.21" name="initialS"/>
+         <o level="2" line="98.26" name="initialD"/>
+         <o level="2" line="98.40" name="initialP"/>
+      </o>
+      <o ancestors="3"
+         line="99"
+         name="dijkstra$processVertex$findDeleteMinWeight$resultStructure"
+         original-name="resultStructure"
+         parent="dijkstra">
+         <o line="99" name="newQ"/>
+         <o line="99" name="min"/>
+         <o level="1" line="99.98" name="oldQ"/>
+         <o level="1" line="99.98" name="currentD"/>
+         <o level="1" line="99.100" name="@"/>
+         <o level="1" line="99.104" name="minVertex"/>
+         <o level="1" line="99.122" name="minIndex"/>
+         <o level="2" line="99.55" name="currentQ"/>
+         <o level="2" line="99.55" name="currentS"/>
+         <o level="2" line="99.55" name="currentP"/>
+         <o level="2" line="99.56" name="newQandMin"/>
+         <o level="2" line="99.58" name="relaxed"/>
+         <o level="2" line="99.69" name="relax"/>
+         <o level="3" line="99.4" name="graphAdjList"/>
+         <o level="3" line="99.4" name="iStartVertex"/>
+         <o level="3" line="99.11" name="initialQ"/>
+         <o level="3" line="99.21" name="initialS"/>
+         <o level="3" line="99.26" name="initialD"/>
+         <o level="3" line="99.40" name="initialP"/>
+      </o>
+      <o ancestors="3"
+         line="106"
+         name="dijkstra$processVertex$findDeleteMinWeight$4$α1"
+         parent="dijkstra">
+         <o base="dijkstra$processVertex$findDeleteMinWeight$4$α1$comparator"
+            cut="168"
+            line="107"
+            name="comparator"
+            ref="107">
+            <o as="oldQ" base="oldQ" level="2" ref="106.98"/>
+            <o as="currentD" base="currentD" level="2" ref="106.98"/>
+            <o as="resultStructure"
+               base="resultStructure"
+               level="2"
+               ref="106.99"/>
+            <o as="@" base="@" level="2" ref="106.100"/>
+            <o as="minIndex" base="minIndex" level="2" ref="106.122"/>
+            <o as="currentQ" base="currentQ" level="3" ref="106.55"/>
+            <o as="currentS" base="currentS" level="3" ref="106.55"/>
+            <o as="currentP" base="currentP" level="3" ref="106.55"/>
+            <o as="newQandMin" base="newQandMin" level="3" ref="106.56"/>
+            <o as="relaxed" base="relaxed" level="3" ref="106.58"/>
+            <o as="relax" base="relax" level="3" ref="106.69"/>
+            <o as="graphAdjList" base="graphAdjList" level="4" ref="106.4"/>
+            <o as="iStartVertex" base="iStartVertex" level="4" ref="106.4"/>
+            <o as="initialQ" base="initialQ" level="4" ref="106.11"/>
+            <o as="initialS" base="initialS" level="4" ref="106.21"/>
+            <o as="initialD" base="initialD" level="4" ref="106.26"/>
+            <o as="initialP" base="initialP" level="4" ref="106.40"/>
+         </o>
+         <o level="1" line="106.98" name="oldQ"/>
+         <o level="1" line="106.98" name="currentD"/>
+         <o level="1" line="106.99" name="resultStructure"/>
+         <o level="1" line="106.100" name="@"/>
+         <o level="1" line="106.122" name="minIndex"/>
+         <o level="2" line="106.55" name="currentQ"/>
+         <o level="2" line="106.55" name="currentS"/>
+         <o level="2" line="106.55" name="currentP"/>
+         <o level="2" line="106.56" name="newQandMin"/>
+         <o level="2" line="106.58" name="relaxed"/>
+         <o level="2" line="106.69" name="relax"/>
+         <o level="3" line="106.4" name="graphAdjList"/>
+         <o level="3" line="106.4" name="iStartVertex"/>
+         <o level="3" line="106.11" name="initialQ"/>
+         <o level="3" line="106.21" name="initialS"/>
+         <o level="3" line="106.26" name="initialD"/>
+         <o level="3" line="106.40" name="initialP"/>
+      </o>
+      <o ancestors="4"
+         line="107"
+         name="dijkstra$processVertex$findDeleteMinWeight$4$α1$comparator"
+         original-name="comparator"
+         parent="dijkstra">
+         <o line="107" name="elemA"/>
+         <o line="107" name="indexA"/>
+         <o line="107" name="elemB"/>
+         <o line="107" name="indexB"/>
+         <o base=".get" line="108" method="" name="dA">
+            <o base=".currentD" line="108" method="">
+               <o base=".^" line="108" method="">
+                  <o base="^" line="108"/>
+               </o>
+            </o>
+            <o base="elemA" line="108" ref="107"/>
+         </o>
+         <o base=".get" line="109" method="" name="dB">
+            <o base=".currentD" line="109" method="">
+               <o base=".^" line="109" method="">
+                  <o base="^" line="109"/>
+               </o>
+            </o>
+            <o base="elemB" line="109" ref="107"/>
+         </o>
+         <o base=".if" line="110" name="@">
+            <o base=".less" line="111">
+               <o base="dA" line="112" ref="108"/>
+               <o base="dB" line="113" ref="109"/>
+            </o>
+            <o base="org.eolang.int" data="int" line="114">-1</o>
+            <o base=".if" line="115">
+               <o base=".greater" line="116">
+                  <o base="dA" line="117" ref="108"/>
+                  <o base="dB" line="118" ref="109"/>
+               </o>
+               <o base="org.eolang.int" data="int" line="119">1</o>
+               <o base="org.eolang.int" data="int" line="120">0</o>
+            </o>
+         </o>
+         <o level="2" line="107.98" name="oldQ"/>
+         <o level="2" line="107.98" name="currentD"/>
+         <o level="2" line="107.99" name="resultStructure"/>
+         <o level="2" line="107.122" name="minIndex"/>
+         <o level="3" line="107.55" name="currentQ"/>
+         <o level="3" line="107.55" name="currentS"/>
+         <o level="3" line="107.55" name="currentP"/>
+         <o level="3" line="107.56" name="newQandMin"/>
+         <o level="3" line="107.58" name="relaxed"/>
+         <o level="3" line="107.69" name="relax"/>
+         <o level="4" line="107.4" name="graphAdjList"/>
+         <o level="4" line="107.4" name="iStartVertex"/>
+         <o level="4" line="107.11" name="initialQ"/>
+         <o level="4" line="107.21" name="initialS"/>
+         <o level="4" line="107.26" name="initialD"/>
+         <o level="4" line="107.40" name="initialP"/>
+      </o>
+   </objects>
+</program>

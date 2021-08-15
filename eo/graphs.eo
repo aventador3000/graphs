@@ -18,8 +18,8 @@
 #
 # Such disctiptions are placed inside an adjacency list, 
 # which is a special data structure that represents a graph
-[vertex vadjacent...] > adjacency
+[vertex edges...] > adjacency
 
 # Adjacency list is a special data structure representing graphs. 
 # Contains adjacency descriptions in it.
-[adjacency...] > adjacencyList
+[adjacencies...] > adjacencyList

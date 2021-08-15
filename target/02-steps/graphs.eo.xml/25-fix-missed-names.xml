@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="218"
+         name="graphs.eo"
+         time="2021-08-15T17:14:36.462692Z"
+         version="1.0.1">
+   <listing>+package graphs
+
+# Vertex (or node) of a graph. 
+# It has:
+#        -- an index (i) for computer-aided reference 
+#        -- and a name for humans
+[i name] &gt; vertex
+
+# Directed edge of a graph. 
+# It has:
+#        -- an index of the destination vertex
+#        -- and a weight of the edge itself
+[ivertex weight] &gt; edge
+
+# Description of adjacency:
+#     == of the node "vertex" 
+#     == to the nodes adjacent to it "vadjacent"
+#
+# Such disctiptions are placed inside an adjacency list, 
+# which is a special data structure that represents a graph
+[vertex edges...] &gt; adjacency
+
+# Adjacency list is a special data structure representing graphs. 
+# Contains adjacency descriptions in it.
+[adjacencies...] &gt; adjacencyList
+&lt;EOF&gt;</listing>
+   <errors/>
+   <sheets>
+      <sheet>not-empty-atoms</sheet>
+      <sheet>middle-varargs</sheet>
+      <sheet>duplicate-names</sheet>
+      <sheet>broken-aliases</sheet>
+      <sheet>duplicate-aliases</sheet>
+      <sheet>one-body</sheet>
+      <sheet>same-line-names</sheet>
+      <sheet>self-naming</sheet>
+      <sheet>add-refs</sheet>
+      <sheet>wrap-method-calls</sheet>
+      <sheet>vars-float-up</sheet>
+      <sheet>add-refs</sheet>
+      <sheet>resolve-aliases</sheet>
+      <sheet>resolve-aliases</sheet>
+      <sheet>add-default-package</sheet>
+      <sheet>broken-refs</sheet>
+      <sheet>unknown-names</sheet>
+      <sheet>noname-attributes</sheet>
+      <sheet>duplicate-names</sheet>
+      <sheet>data-objects</sheet>
+      <sheet>globals-to-abstracts</sheet>
+      <sheet>remove-refs</sheet>
+      <sheet>abstracts-float-up</sheet>
+      <sheet>remove-levels</sheet>
+      <sheet>add-refs</sheet>
+      <sheet>fix-missed-names</sheet>
+   </sheets>
+   <metas>
+      <meta line="1">
+         <head>package</head>
+         <tail>graphs</tail>
+         <part>graphs</part>
+      </meta>
+   </metas>
+   <objects>
+      <o line="7" name="vertex" original-name="vertex">
+         <o line="7" name="i"/>
+         <o line="7" name="name"/>
+      </o>
+      <o line="13" name="edge" original-name="edge">
+         <o line="13" name="ivertex"/>
+         <o line="13" name="weight"/>
+      </o>
+      <o line="21" name="adjacency" original-name="adjacency">
+         <o line="21" name="vertex"/>
+         <o line="21" name="edges" vararg=""/>
+      </o>
+      <o line="25" name="adjacencyList" original-name="adjacencyList">
+         <o line="25" name="adjacencies" vararg=""/>
+      </o>
+   </objects>
+</program>

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<program ms="4"
+         name="testGraph.eo"
+         time="2021-08-15T17:14:37.064927Z"
+         version="1.0.1">
+   <listing>+package graphs
++alias graphs.vertex
++alias graphs.edge
++alias graphs.adjacency
++alias graphs.adjacencyList
+
+adjacencyList &gt; testGraph
+  adjacency
+    vertex
+      0
+      "A"
+    edge
+      1
+      3.0
+    edge
+      5
+      1.0
+  adjacency
+    vertex
+      1
+      "B"
+    edge
+      2
+      1.0
+    edge
+      3
+      7.0
+  adjacency
+    vertex
+      2
+      "C"
+    edge
+      0
+      2.0
+    edge
+      4
+      1.0
+    edge
+      3
+      9.0
+  adjacency
+    vertex
+      3
+      "D"
+  adjacency
+    vertex
+      4
+      "E"
+    edge
+      3
+      7.0
+    edge
+      5
+      6.0
+  adjacency
+    vertex
+      5
+      "F"
+    edge
+      3
+      2.0
+    edge
+      0
+      1.0
+&lt;EOF&gt;</listing>
+   <errors/>
+   <sheets>
+      <sheet>not-empty-atoms</sheet>
+      <sheet>middle-varargs</sheet>
+      <sheet>duplicate-names</sheet>
+      <sheet>broken-aliases</sheet>
+   </sheets>
+   <metas>
+      <meta line="1">
+         <head>package</head>
+         <tail>graphs</tail>
+         <part>graphs</part>
+      </meta>
+      <meta line="2">
+         <head>alias</head>
+         <tail>graphs.vertex</tail>
+         <part>graphs.vertex</part>
+      </meta>
+      <meta line="3">
+         <head>alias</head>
+         <tail>graphs.edge</tail>
+         <part>graphs.edge</part>
+      </meta>
+      <meta line="4">
+         <head>alias</head>
+         <tail>graphs.adjacency</tail>
+         <part>graphs.adjacency</part>
+      </meta>
+      <meta line="5">
+         <head>alias</head>
+         <tail>graphs.adjacencyList</tail>
+         <part>graphs.adjacencyList</part>
+      </meta>
+   </metas>
+   <objects>
+      <o base="adjacencyList" line="7" name="testGraph">
+         <o base="adjacency" line="8">
+            <o base="vertex" line="9">
+               <o base="int" data="int" line="10">0</o>
+               <o base="string" data="string" line="11">A</o>
+            </o>
+            <o base="edge" line="12">
+               <o base="int" data="int" line="13">1</o>
+               <o base="float" data="float" line="14">3.0</o>
+            </o>
+            <o base="edge" line="15">
+               <o base="int" data="int" line="16">5</o>
+               <o base="float" data="float" line="17">1.0</o>
+            </o>
+         </o>
+         <o base="adjacency" line="18">
+            <o base="vertex" line="19">
+               <o base="int" data="int" line="20">1</o>
+               <o base="string" data="string" line="21">B</o>
+            </o>
+            <o base="edge" line="22">
+               <o base="int" data="int" line="23">2</o>
+               <o base="float" data="float" line="24">1.0</o>
+            </o>
+            <o base="edge" line="25">
+               <o base="int" data="int" line="26">3</o>
+               <o base="float" data="float" line="27">7.0</o>
+            </o>
+         </o>
+         <o base="adjacency" line="28">
+            <o base="vertex" line="29">
+               <o base="int" data="int" line="30">2</o>
+               <o base="string" data="string" line="31">C</o>
+            </o>
+            <o base="edge" line="32">
+               <o base="int" data="int" line="33">0</o>
+               <o base="float" data="float" line="34">2.0</o>
+            </o>
+            <o base="edge" line="35">
+               <o base="int" data="int" line="36">4</o>
+               <o base="float" data="float" line="37">1.0</o>
+            </o>
+            <o base="edge" line="38">
+               <o base="int" data="int" line="39">3</o>
+               <o base="float" data="float" line="40">9.0</o>
+            </o>
+         </o>
+         <o base="adjacency" line="41">
+            <o base="vertex" line="42">
+               <o base="int" data="int" line="43">3</o>
+               <o base="string" data="string" line="44">D</o>
+            </o>
+         </o>
+         <o base="adjacency" line="45">
+            <o base="vertex" line="46">
+               <o base="int" data="int" line="47">4</o>
+               <o base="string" data="string" line="48">E</o>
+            </o>
+            <o base="edge" line="49">
+               <o base="int" data="int" line="50">3</o>
+               <o base="float" data="float" line="51">7.0</o>
+            </o>
+            <o base="edge" line="52">
+               <o base="int" data="int" line="53">5</o>
+               <o base="float" data="float" line="54">6.0</o>
+            </o>
+         </o>
+         <o base="adjacency" line="55">
+            <o base="vertex" line="56">
+               <o base="int" data="int" line="57">5</o>
+               <o base="string" data="string" line="58">F</o>
+            </o>
+            <o base="edge" line="59">
+               <o base="int" data="int" line="60">3</o>
+               <o base="float" data="float" line="61">2.0</o>
+            </o>
+            <o base="edge" line="62">
+               <o base="int" data="int" line="63">0</o>
+               <o base="float" data="float" line="64">1.0</o>
+            </o>
+         </o>
+      </o>
+   </objects>
+</program>
