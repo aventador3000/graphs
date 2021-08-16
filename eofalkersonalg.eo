@@ -1,0 +1,171 @@
++package graphs
++alias org.eolang.util.ieee754.infinity
+
+[graphAdjList iStartVertex] > falkersonalg
+  processVertex > @
+    initialQ
+    initialC
+    initialU
+    initialV
+    initialS
+    initialT
+    
+  [] > initialQ
+    map. > @
+      (^.graphAdjList.adjacencies)
+      []
+        [currentAdjacency] > map
+          currentAdjacency.vertex.i > @
+    
+  [] > initialS
+    * > @
+  
+  [] > initialU
+    map. > @
+      ^.graphAdjList.adjacencies
+      []
+        [currentAdjacency] > map
+          if. > @
+            eq.
+              currentAdjacency.vertex.i
+              ^.iStartVertex
+            0.0
+            infinity
+            
+   [] > initialV
+    map. > @
+      ^.graphAdjList.adjacencies
+      []
+        [currentAdjacency] > map
+          if. > @
+            eq.
+              currentAdjacency.vertex.i
+              ^.^.iStartVertex
+            0.0
+            infinity
+
+    [arr] > indexOfMin
+    indexOf > @
+      arr
+      findMin
+        arr
+
+  [arr elem] > indexOf
+    subIndexOf > @
+      arr
+      elem
+      0
+
+  [arr elem i] > subIndexOf
+    if. > @
+      eq.
+        arr.length
+        i
+      -1
+      if.
+        eq.
+          elem.weight
+          (arr.get i).weight
+        i
+        subIndexOf
+          arr
+          elem
+          add.
+            i
+            1
+
+  [arr] > findMin
+    reduce. > @
+      arr
+      arr.get 0
+      [accumulator current]
+        if. > @
+          less.
+            accumulator.weight
+            current.weight
+          accumulator
+          current
+
+  [arr i] > removeAt
+    merge > @
+      sliceFromStartTo
+        arr
+        i
+      sliceToEndFrom
+        arr
+        add.
+          i
+          1
+
+  [arr1 arr2] > merge
+    reduce. > @
+      arr2
+      arr1
+      [accumulator current]
+        append. > @
+          accumulator
+          current
+
+  [arr end] > sliceFromStartTo
+    slice > @
+      arr
+      array
+      0
+      end
+
+  [arr start] > sliceToEndFrom
+    slice > @
+      arr
+      array
+      start
+      arr.length
+
+  [arr accumulator start end] > slice
+    if. > @
+      less.
+        start
+        end
+      slice
+        arr
+        append.
+          accumulator
+          get.
+            arr
+            start
+        add.
+          start
+          1
+        end
+      accumulator
+      
+   [oldQ currentD] > findDeleteMinWeight
+      [newQ min] > resultStructure
+      resultStructure > @
+        oldQ.remove minIndex
+        oldQ.get minIndex
+
+    min. > minVertex
+        oldQ
+        []
+          [elemA indexA elemB indexB] > comparator
+            ^.^.currentD.get elemA > dA
+            ^.^.currentD.get elemB > dB
+            if. > @
+              less.
+                dA
+                dB
+              -1
+              if.
+                greater.
+                  dA
+                  dB
+                1
+                0
+
+     if. > minIndex
+        minVertex.eq -1
+        if.
+          oldQ.length.eq 0
+          -1
+          0
+        minVertex
